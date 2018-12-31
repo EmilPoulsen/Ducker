@@ -75,30 +75,71 @@ namespace Ducker
 
             }
 
+            List<DuckerComponent> duckers = new List<DuckerComponent>();
 
             foreach (Type type in DLL.GetExportedTypes())
             {
 
-                if (IsDerivedFromGhComponent(type))
+                if (IsDerivedFromGhComponent(type) && !type.IsAbstract)
                 {
                     dynamic c = Activator.CreateInstance(type);
-                    string description = c.Description;
 
+                    DuckerComponent duckerComponent = new DuckerComponent()
+                    {
+                        Name = c.Name,
+                        NickName = c.NickName,
+                        Description = c.Description
+                    };
+                    
                     dynamic parameters = c.Params;
-
-                    foreach (var input in parameters.Input)
+                    foreach (var parameter in parameters.Input)
                     {
-                       
-
+                        duckerComponent.Input.Add(CreateDuckerParam(parameter));                        
                     }
 
-                    foreach (var output in parameters.Output)
+                    foreach (var parameter in parameters.Output)
                     {
-
+                        duckerComponent.Input.Add(CreateDuckerParam(parameter));
                     }
 
+                    duckers.Add(duckerComponent);
                 }
             }
+        }  
+
+        public static DuckerParam CreateDuckerParam(dynamic parameter)
+        {
+            DuckerParam duckerParam = new DuckerParam()
+            {
+                Name = parameter.Name,
+                NickName = parameter.NickName,
+                Description = parameter.Description
+            };
+            return duckerParam;
+        }
+
+        public class DuckerParam
+        {
+            public string Description { get; set; }
+            public string Name { get; set; }
+            public string NickName { get; set; }
+        }
+
+        public class DuckerComponent
+        {
+            public DuckerComponent()
+            {
+                this.Input = new List<DuckerParam>();
+                this.Output = new List<DuckerParam>();
+            }
+
+            public List<DuckerParam> Input { get; set; }
+            public List<DuckerParam> Output { get; set; }
+            public string Description { get; set; }
+            public string Name { get; set; }
+            public string NickName { get; set; }
+            
+
         }
 
         private static bool IsDerivedFromGhComponent(Type type)
