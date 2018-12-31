@@ -82,18 +82,23 @@ namespace Ducker
                 if (IsDerivedFromGhComponent(type))
                 {
                     dynamic c = Activator.CreateInstance(type);
-                    string s = c.Description;
+                    string description = c.Description;
 
-                    
+                    dynamic parameters = c.Params;
+
+                    foreach (var input in parameters.Input)
+                    {
+                       
+
+                    }
+
+                    foreach (var output in parameters.Output)
+                    {
+
+                    }
+
                 }
-
-                
-                //
-                //type.IsAssignableFrom(typeof(GH_Component))
-                //var c = Activator.CreateInstance(type);
-                //type.InvokeMember("Output", BindingFlags.InvokeMethod, null, c, new object[] { @"Hello" });
             }
-
         }
 
         private static bool IsDerivedFromGhComponent(Type type)
