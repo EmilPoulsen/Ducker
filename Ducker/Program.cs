@@ -123,6 +123,11 @@ namespace Ducker
             public string Description { get; set; }
             public string Name { get; set; }
             public string NickName { get; set; }
+
+            public override string ToString()
+            {
+                return this.Name;
+            }
         }
 
         public class DuckerComponent
@@ -138,8 +143,11 @@ namespace Ducker
             public string Description { get; set; }
             public string Name { get; set; }
             public string NickName { get; set; }
-            
 
+            public override string ToString()
+            {
+                return this.Name;
+            }
         }
 
         private static bool IsDerivedFromGhComponent(Type type)
