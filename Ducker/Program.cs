@@ -101,10 +101,11 @@ namespace Ducker
                     {
                         duckerComponent.Input.Add(CreateDuckerParam(parameter));
                     }
-
+                    Console.WriteLine(string.Format("Successfully read {0}", duckerComponent.Name));
                     duckers.Add(duckerComponent);
                 }
             }
+            ExitInProcess();
         }  
 
         public static DuckerParam CreateDuckerParam(dynamic parameter)
@@ -167,6 +168,9 @@ namespace Ducker
 
         [DllImport("RhinoLibrary.dll")]
         internal static extern int LaunchInProcess(int reserved1, int reserved2);
+
+        [DllImport("RhinoLibrary.dll")]
+        internal static extern int ExitInProcess();
 
 
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
