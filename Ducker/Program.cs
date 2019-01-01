@@ -148,7 +148,7 @@ namespace Ducker
 
             while(currType != null)
             {
-                if (currType.Name.StartsWith("GH_Component"))
+                if (currType.Name.Equals("GH_Component"))
                 {
                     return true;
                 }
