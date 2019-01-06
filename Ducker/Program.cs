@@ -12,7 +12,8 @@ namespace Ducker
     class Program
     {
         static bool initialized = false;
-        static string systemDir = null;
+        static string rhinoSystemDir = null;
+        static string grasshopperSystemDir = null;
 
         public static void AssemblyInitialize()
         {
@@ -23,22 +24,24 @@ namespace Ducker
             initialized = true;
 
             // Ensure we are 64 bit
-            if (!Environment.Is64BitProcess) {
+            if (!Environment.Is64BitProcess)
+            {
                 throw new Exception("Tests must be run as x64");
-            } 
+            }
 
             // Set path to rhino system directory
             string envPath = Environment.GetEnvironmentVariable("path");
-             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            systemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
+            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            rhinoSystemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
+            grasshopperSystemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "Plug-ins", "Grasshopper");
 
-            if (!System.IO.Directory.Exists(systemDir))
+            if (!System.IO.Directory.Exists(rhinoSystemDir))
             {
-                throw new Exception(string.Format("Rhino system dir not found: {0}", systemDir));
+                throw new Exception(string.Format("Rhino system dir not found: {0}", rhinoSystemDir));
             }
-            
+
             // Add rhino system directory to path (for RhinoLibrary.dll)
-            Environment.SetEnvironmentVariable("path", envPath + ";" + systemDir);
+            Environment.SetEnvironmentVariable("path", envPath + ";" + rhinoSystemDir);
 
             // Add hook for .Net assmbly resolve (for RhinoCommmon.dll)
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
@@ -90,11 +93,11 @@ namespace Ducker
                         NickName = c.NickName,
                         Description = c.Description
                     };
-                    
+
                     dynamic parameters = c.Params;
                     foreach (var parameter in parameters.Input)
                     {
-                        duckerComponent.Input.Add(CreateDuckerParam(parameter));                        
+                        duckerComponent.Input.Add(CreateDuckerParam(parameter));
                     }
 
                     foreach (var parameter in parameters.Output)
@@ -105,8 +108,60 @@ namespace Ducker
                     duckers.Add(duckerComponent);
                 }
             }
+
+            string content = CreateMarkdown(duckers);
+
+            string pathToOutput = @"C:\Users\epoulsen\Documents\GitHub\Emu\Emu\Emu.Grasshopper\bin\Release\Emu.Grasshopper.md";
+
+            WriteFile(content, pathToOutput);
+
             ExitInProcess();
-        }  
+        }
+
+        public static void WriteFile(string content, string path)
+        {
+            try
+            {
+                File.WriteAllText(path, content);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private static string CreateMarkdown(List<DuckerComponent> components)
+        {
+            //StringBuilder
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var component in components)
+            {
+                builder.Append(Header(component.Name));
+                builder.Append(Paragraph(Bold(nameof(component.Name) + ":") + " " + component.Name));
+                builder.Append(Paragraph(Bold(nameof(component.NickName) + ":") + " " + component.NickName));
+                builder.Append(Paragraph(Bold(nameof(component.Description) + ":") + " " + component.Description));
+                builder.Append(Environment.NewLine);
+            }
+
+            return builder.ToString();
+        }
+
+        public static string Bold(string text)
+        {
+            return "**" + text + "**";
+        }
+
+        public static string Paragraph(string text)
+        {
+            return text + "  " + Environment.NewLine;
+        }
+
+        public static string Header(string text)
+        {
+            return "# " + text + Environment.NewLine;
+        }
 
         public static DuckerParam CreateDuckerParam(dynamic parameter)
         {
@@ -155,7 +210,7 @@ namespace Ducker
         {
             Type currType = type;
 
-            while(currType != null)
+            while (currType != null)
             {
                 if (currType.Name.Equals("GH_Component"))
                 {
@@ -179,38 +234,22 @@ namespace Ducker
 
             if (name.StartsWith("RhinoCommon"))
             {
-                var path = System.IO.Path.Combine(systemDir, "RhinoCommon.dll");
+                var path = System.IO.Path.Combine(rhinoSystemDir, "RhinoCommon.dll");
                 return Assembly.LoadFrom(path);
             }
 
             if (name.StartsWith("Grasshopper"))
             {
-
+                var path = System.IO.Path.Combine(grasshopperSystemDir, "Grasshopper.dll");
+                return Assembly.LoadFrom(path);
             }
-
-            // Ignore missing resources
-            if (args.Name.Contains(".resources"))
-                return null;
 
             // check for assemblies already loaded
             Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName == args.Name);
             if (assembly != null)
                 return assembly;
 
-            // Try to load by filename - split out the filename of the full assembly name
-            // and append the base path of the original assembly (ie. look in the same dir)
-            string filename = args.Name.Split(',')[0] + ".dll".ToLower();
-
-            string asmFile = Path.Combine(@".\", "Addins", filename);
-
-            try
-            {
-                return System.Reflection.Assembly.LoadFrom(asmFile);
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return null;
 
         }
     }
