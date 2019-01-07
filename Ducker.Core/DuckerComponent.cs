@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace Ducker.Core
 {
@@ -19,6 +16,8 @@ namespace Ducker.Core
         public string Description { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
+        public Bitmap Icon { get; set; }
+        
 
         public override string ToString()
         {
