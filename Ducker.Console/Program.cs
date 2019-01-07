@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Ducker.Core;
 
 namespace Ducker
 {
@@ -102,7 +103,7 @@ namespace Ducker
 
                     foreach (var parameter in parameters.Output)
                     {
-                        duckerComponent.Input.Add(CreateDuckerParam(parameter));
+                        duckerComponent.Output.Add(CreateDuckerParam(parameter));
                     }
                     Console.WriteLine(string.Format("Successfully read {0}", duckerComponent.Name));
                     duckers.Add(duckerComponent);
@@ -110,11 +111,8 @@ namespace Ducker
             }
 
             string content = CreateMarkdown(duckers);
-
             string pathToOutput = @"C:\Users\epoulsen\Documents\GitHub\Emu\Emu\Emu.Grasshopper\bin\Release\Emu.Grasshopper.md";
-
             WriteFile(content, pathToOutput);
-
             ExitInProcess();
         }
 
@@ -143,9 +141,50 @@ namespace Ducker
                 builder.Append(Paragraph(Bold(nameof(component.NickName) + ":") + " " + component.NickName));
                 builder.Append(Paragraph(Bold(nameof(component.Description) + ":") + " " + component.Description));
                 builder.Append(Environment.NewLine);
+
+                if (component.Input.Count > 0) {
+                    builder.Append(Header(nameof(component.Input), 3));
+                    string table = GenerateParamTable(component.Input);
+                    builder.Append(table);
+                }
+                if (component.Output.Count > 0)
+                {
+                    builder.Append(Header(nameof(component.Output), 3));
+                    string table = GenerateParamTable(component.Output);
+                    builder.Append(table);
+                }
             }
 
             return builder.ToString();
+        }
+
+        private static string GenerateParamTable(List<DuckerParam> compParameter)
+        {
+            StringBuilder builder = new StringBuilder();
+            var p = compParameter[0];
+            string header = GetParamHeader(p);
+            string splitter = "| ------ | ------ | ------ |";
+            builder.AppendLine(header);
+            builder.AppendLine(splitter);
+            foreach (var parameter in compParameter)
+            {
+                string row = GetParamRow(parameter);
+                builder.AppendLine(row);
+            }
+            return builder.ToString();
+
+        }
+
+        private static string GetParamRow(DuckerParam p)
+        {
+            string header = string.Format("| {0} | {1} | {2} |", p.Name, p.NickName, p.Description);
+            return header;
+        }
+
+        private static string GetParamHeader(DuckerParam p)
+        {
+            string header = string.Format("| {0} | {1} | {2} |", nameof(p.Name), nameof(p.NickName), nameof(p.Description));
+            return header;
         }
 
         public static string Bold(string text)
@@ -158,9 +197,15 @@ namespace Ducker
             return text + "  " + Environment.NewLine;
         }
 
+        public static string Header(string text, int level)
+        {
+            string hashes = new string('#', level) + " ";
+            return hashes + text + Environment.NewLine; ;
+        }
+
         public static string Header(string text)
         {
-            return "# " + text + Environment.NewLine;
+            return Header(text, 1);
         }
 
         public static DuckerParam CreateDuckerParam(dynamic parameter)
@@ -173,39 +218,7 @@ namespace Ducker
             };
             return duckerParam;
         }
-
-        public class DuckerParam
-        {
-            public string Description { get; set; }
-            public string Name { get; set; }
-            public string NickName { get; set; }
-
-            public override string ToString()
-            {
-                return this.Name;
-            }
-        }
-
-        public class DuckerComponent
-        {
-            public DuckerComponent()
-            {
-                this.Input = new List<DuckerParam>();
-                this.Output = new List<DuckerParam>();
-            }
-
-            public List<DuckerParam> Input { get; set; }
-            public List<DuckerParam> Output { get; set; }
-            public string Description { get; set; }
-            public string Name { get; set; }
-            public string NickName { get; set; }
-
-            public override string ToString()
-            {
-                return this.Name;
-            }
-        }
-
+        
         private static bool IsDerivedFromGhComponent(Type type)
         {
             Type currType = type;
