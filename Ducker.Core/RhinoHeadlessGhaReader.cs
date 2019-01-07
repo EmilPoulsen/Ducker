@@ -15,7 +15,7 @@ namespace Ducker.Core
         static string rhinoSystemDir = null;
         static string grasshopperSystemDir = null;
 
-        public static void AssemblyInitialize()
+        public void AssemblyInitialize()
         {
             if (initialized)
             {
@@ -119,7 +119,7 @@ namespace Ducker.Core
         internal static extern int ExitInProcess();
 
 
-        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
             var name = args.Name;
 
@@ -144,7 +144,7 @@ namespace Ducker.Core
 
         }
 
-        private static bool IsDerivedFromGhComponent(Type type)
+        private bool IsDerivedFromGhComponent(Type type)
         {
             Type currType = type;
 
@@ -159,7 +159,7 @@ namespace Ducker.Core
             return false;
         }
 
-        public static DuckerParam CreateDuckerParam(dynamic parameter)
+        public DuckerParam CreateDuckerParam(dynamic parameter)
         {
             DuckerParam duckerParam = new DuckerParam()
             {

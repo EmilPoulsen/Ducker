@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
-    interface IDocWriter
+    public interface IDocWriter
     {
         void Write(string content, string path);
     }

@@ -9,5 +9,7 @@ namespace Ducker.Core
     public interface IDocGenerator
     {
         string Create(List<DuckerComponent> components);
+
+        string FileExtension { get; }
     }
 }

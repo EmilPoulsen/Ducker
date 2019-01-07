@@ -43,9 +43,13 @@
   <ItemGroup>
     <Compile Include="DuckerComponent.cs" />
     <Compile Include="DuckerParam.cs" />
+    <Compile Include="DuckRunner.cs" />
+    <Compile Include="EmuMdDocGenerator.cs" />
     <Compile Include="IDocGenerator.cs" />
     <Compile Include="IDocWriter.cs" />
     <Compile Include="IGhaReader.cs" />
+    <Compile Include="MarkDownDocGenerator.cs" />
+    <Compile Include="MarkDownDocWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RhinoHeadlessGhaReader.cs" />
   </ItemGroup>
