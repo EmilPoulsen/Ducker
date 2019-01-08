@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -85,12 +86,23 @@ namespace Ducker.Core
                 if (IsDerivedFromGhComponent(type) && !type.IsAbstract)
                 {
                     dynamic c = Activator.CreateInstance(type);
+                    Bitmap icon = null;
+
+                    try
+                    {
+                        icon = c.Icon_24x24;
+                    }
+                    catch (Exception)
+                    {
+
+                    }
 
                     DuckerComponent duckerComponent = new DuckerComponent()
                     {
                         Name = c.Name,
                         NickName = c.NickName,
-                        Description = c.Description
+                        Description = c.Description,
+                        Icon = icon
                     };
 
                     dynamic parameters = c.Params;

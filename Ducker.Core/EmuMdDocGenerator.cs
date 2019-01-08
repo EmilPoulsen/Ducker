@@ -8,8 +8,9 @@ namespace Ducker.Core
 {
     public class EmuMdDocGenerator : MarkDownDocGenerator
     {
-        public override string Create(List<DuckerComponent> components)
+        public override DocumentContent Create(List<DuckerComponent> components)
         {
+            DocumentContent docContent = new DocumentContent();
             //StringBuilder
             StringBuilder builder = new StringBuilder();
 
@@ -35,7 +36,9 @@ namespace Ducker.Core
                 }
             }
 
-            return builder.ToString();
+            docContent.Document = builder.ToString();
+            docContent.Icons = base.ReadIcons(components);
+            return docContent;
         }
     }
 }

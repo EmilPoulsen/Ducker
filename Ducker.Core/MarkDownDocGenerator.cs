@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Ducker.Core
             }
         }
 
-        public abstract string Create(List<DuckerComponent> components);
+        public abstract DocumentContent Create(List<DuckerComponent> components);
 
         protected string GenerateParamTable(List<DuckerParam> compParameter)
         {
@@ -52,6 +53,11 @@ namespace Ducker.Core
             return "**" + text + "**";
         }
 
+        protected void SaveBitmap()
+        {
+
+        }
+
         protected string Paragraph(string text)
         {
             return text + "  " + Environment.NewLine;
@@ -66,6 +72,17 @@ namespace Ducker.Core
         protected string Header(string text)
         {
             return Header(text, 1);
+        }
+
+        protected List<Bitmap> ReadIcons(List<DuckerComponent> components)
+        {
+            components.ForEach(c => {
+                if(c.Icon != null)
+                {
+                    c.Icon.Tag = c.Name;                    
+                }
+            });
+            return components.Select(c => c.Icon).ToList();
         }
 
     }

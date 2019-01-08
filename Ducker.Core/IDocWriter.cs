@@ -8,6 +8,6 @@ namespace Ducker.Core
 {
     public interface IDocWriter
     {
-        void Write(string content, string path);
+        void Write(DocumentContent content, string path);
     }
 }
