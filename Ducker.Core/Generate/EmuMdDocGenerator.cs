@@ -16,7 +16,8 @@ namespace Ducker.Core
 
             foreach (var component in components)
             {
-                builder.Append(Header(component.Name));
+                builder.AppendLine(string.Format("{0} {1}", Header(component.Name), Image("",
+                    docContent.RelativePathIcons, component.GetNameWithoutSpaces())));
                 builder.Append(Paragraph(Bold(nameof(component.Name) + ":") + " " + component.Name));
                 builder.Append(Paragraph(Bold(nameof(component.NickName) + ":") + " " + component.NickName));
                 builder.Append(Paragraph(Bold(nameof(component.Description) + ":") + " " + component.Description));
@@ -24,13 +25,13 @@ namespace Ducker.Core
 
                 if (component.Input.Count > 0)
                 {
-                    builder.Append(Header(nameof(component.Input), 3));
+                    builder.AppendLine(Header(nameof(component.Input), 3));
                     string table = GenerateParamTable(component.Input);
                     builder.Append(table);
                 }
                 if (component.Output.Count > 0)
                 {
-                    builder.Append(Header(nameof(component.Output), 3));
+                    builder.AppendLine(Header(nameof(component.Output), 3));
                     string table = GenerateParamTable(component.Output);
                     builder.Append(table);
                 }

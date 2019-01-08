@@ -16,7 +16,7 @@ namespace Ducker.Core
             try
             {
                 File.WriteAllText(path, docContent.Document);
-                SaveIcons(docContent.Icons, path);
+                SaveIcons(docContent, path);
             }
             catch (Exception e)
             {
@@ -24,12 +24,13 @@ namespace Ducker.Core
             }
         }
 
-        private void SaveIcons(List<Bitmap> icons, string path)
+        private void SaveIcons(DocumentContent docContent, string path)
         {
+            List<Bitmap> icons = docContent.Icons;
             var copy = new List<Bitmap>(icons);
             copy.RemoveAll(i => i == null);
             path = Path.GetDirectoryName(path);
-            path = Path.Combine(path, "icons");
+            path = Path.Combine(path, docContent.RelativePathIcons);
             Directory.CreateDirectory(path);
 
             foreach (var icon in copy)

@@ -66,7 +66,7 @@ namespace Ducker.Core
         protected string Header(string text, int level)
         {
             string hashes = new string('#', level) + " ";
-            return hashes + text + Environment.NewLine; ;
+            return hashes + text;
         }
 
         protected string Header(string text)
@@ -74,12 +74,17 @@ namespace Ducker.Core
             return Header(text, 1);
         }
 
+        protected string Image(string caption, string relativePath, string fileName)
+        {
+            return string.Format("![{0}]({1}/{2}.png)", caption, relativePath, fileName);
+        }
+
         protected List<Bitmap> ReadIcons(List<DuckerComponent> components)
         {
             components.ForEach(c => {
                 if(c.Icon != null)
                 {
-                    c.Icon.Tag = c.Name;                    
+                    c.Icon.Tag = c.GetNameWithoutSpaces();                    
                 }
             });
             return components.Select(c => c.Icon).ToList();

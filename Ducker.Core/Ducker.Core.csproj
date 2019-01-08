@@ -41,18 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentContent.cs" />
     <Compile Include="DuckerComponent.cs" />
     <Compile Include="DuckerParam.cs" />
     <Compile Include="DuckRunner.cs" />
-    <Compile Include="EmuMdDocGenerator.cs" />
-    <Compile Include="IDocGenerator.cs" />
-    <Compile Include="IDocWriter.cs" />
-    <Compile Include="IGhaReader.cs" />
-    <Compile Include="MarkDownDocGenerator.cs" />
-    <Compile Include="MarkDownDocWriter.cs" />
+    <Compile Include="Generate\EmuMdDocGenerator.cs" />
+    <Compile Include="Generate\IDocGenerator.cs" />
+    <Compile Include="Write\IDocWriter.cs" />
+    <Compile Include="Read\IGhaReader.cs" />
+    <Compile Include="Generate\MarkDownDocGenerator.cs" />
+    <Compile Include="Write\MarkDownDocWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RhinoHeadlessGhaReader.cs" />
+    <Compile Include="Read\RhinoHeadlessGhaReader.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
