@@ -6,7 +6,30 @@
         xmlns:local="clr-namespace:Ducker.UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+  <Grid ShowGridLines="True">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="30"></RowDefinition>
+    </Grid.RowDefinitions>
+    
+    <GroupBox Header="Paths" Grid.Row="0">
+
+      <StackPanel>
+        <Label>Input .gha</Label>
+        <DockPanel Margin="0" Grid.Row="1" LastChildFill="True">
+          <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
+        ToolTip="Set the path for the output file."
+        ToolTipService.ShowOnDisabled="True">
+            ...
+          </Button>
+          <TextBox Name="tbPath" Margin="0,5,0,0" Width="Auto" Height ="25"
+                   MinHeight="25" IsReadOnly="True" TextWrapping="Wrap">
+          </TextBox>
+        </DockPanel>
+
+      </StackPanel>
+    </GroupBox>
+
+  </Grid>
 </Window>

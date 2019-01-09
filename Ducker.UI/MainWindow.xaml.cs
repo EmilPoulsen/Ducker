@@ -24,5 +24,10 @@ namespace Ducker.UI
         {
             InitializeComponent();
         }
+
+        private void btnSetPath_Click(object sender, RoutedEventArgs e)
+        {
+            // do something
+        }
     }
 }
