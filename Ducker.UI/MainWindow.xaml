@@ -6,30 +6,125 @@
         xmlns:local="clr-namespace:Ducker.UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-  <Grid ShowGridLines="True">
+  <Grid ShowGridLines="false">
     <Grid.RowDefinitions>
+      <RowDefinition></RowDefinition>
       <RowDefinition Height="*"></RowDefinition>
-      <RowDefinition Height="*"></RowDefinition>
-      <RowDefinition Height="30"></RowDefinition>
+      <RowDefinition Height="40"></RowDefinition>
+      <RowDefinition Height="40"></RowDefinition>
     </Grid.RowDefinitions>
-    
+
     <GroupBox Header="Paths" Grid.Row="0">
 
       <StackPanel>
         <Label>Input .gha</Label>
-        <DockPanel Margin="0" Grid.Row="1" LastChildFill="True">
+        <DockPanel Margin="0" >
           <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
-        ToolTip="Set the path for the output file."
-        ToolTipService.ShowOnDisabled="True">
+        ToolTip="Set the path for the output file.">
             ...
           </Button>
-          <TextBox Name="tbPath" Margin="0,5,0,0" Width="Auto" Height ="25"
-                   MinHeight="25" IsReadOnly="True" TextWrapping="Wrap">
+          <TextBox Name="tbGhaPath" Margin="0,5,0,0" Width="Auto" Height ="25"
+                   MinHeight="25">
+          </TextBox>
+        </DockPanel>
+
+        <Label>Rhino folder</Label>
+        <DockPanel Margin="0" >
+          <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
+        ToolTip="Set the path for the output file.">
+            ...
+          </Button>
+          <TextBox Name="tbRhinoPath" Margin="0,5,0,0" Width="Auto" Height ="25"
+                   MinHeight="25">
+            C:\Program Files\Rhino 6
+          </TextBox>
+        </DockPanel>
+
+        <Grid>
+
+          <Label Margin="0,0,0,0" Content="Output path"
+                ToolTip="The directory of the output files the app produce."/>
+          <DockPanel x:Name="attributesAreaPanel"
+                 HorizontalAlignment="Right">
+            <Label Margin="0" Content="Relative to .gha"/>
+            <CheckBox  Margin="0,5,0,0" Name="cbxCheckAll" IsChecked="True"></CheckBox>
+          </DockPanel>
+
+          
+        </Grid>
+
+
+        
+        <DockPanel Margin="0" >
+          <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
+        ToolTip="Set the path for the output file.">
+            ...
+          </Button>
+
+          <TextBox Name="tbOutputPath" Margin="0,5,0,0" Width="Auto" Height ="25"
+                   MinHeight="25">
+            ducker
           </TextBox>
         </DockPanel>
 
       </StackPanel>
     </GroupBox>
+
+    <GroupBox Header="Settings" Grid.Row="1">
+      <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+          <RowDefinition Height ="50"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+          <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"></ColumnDefinition>
+          <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+      
+      
+      <StackPanel Margin="10" Grid.Row="0" Grid.ColumnSpan="2">
+        <ComboBox Name="cmbColors">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <StackPanel Orientation="Horizontal">
+                <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                <TextBlock Text="{Binding Name}" />
+              </StackPanel>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+
+        <CheckBox Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll2" IsChecked="True">Ignore hidded</CheckBox>
+        <CheckBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll3" IsChecked="True">Export Icons</CheckBox>
+        
+        <CheckBox Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll4" IsChecked="True">Name</CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll5" IsChecked="True">Nick name</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll6" IsChecked="True">Description</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll7" IsChecked="True">Parameters</CheckBox>
+      </Grid>
+ 
+        
+    </GroupBox>
+
+
+    <DockPanel Grid.Row ="2">
+      <Button>Run</Button>
+    </DockPanel>
+
+    <Grid Grid.Row="3">
+      <ProgressBar Minimum="0"
+                   Maximum="100"
+                   Name="pbStatus" />
+      <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center" />
+    </Grid>
+
+
 
   </Grid>
 </Window>
