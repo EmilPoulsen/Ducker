@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,7 +30,7 @@ namespace Ducker.UI
             InitializeComponent();
             double scale = 0.3;
             this.Width = IPhoneXWidth(scale);
-            this.Height = IPhoneXHeigh(scale);
+            this.Height = 600;//IPhoneXHeigh(scale);
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Title = string.Format("Ducker {0}", assemblyVersion);
             cmbColors.ItemsSource = typeof(Colors).GetProperties();
@@ -49,6 +51,15 @@ namespace Ducker.UI
 
         private void btnSetPath_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Grasshopper assemblies|*.gha"; ;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string path = openFileDialog.FileName;
+                tbGhaPath.Text = path;
+            }
+
             // do something
         }
     }

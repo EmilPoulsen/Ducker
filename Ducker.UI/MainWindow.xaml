@@ -12,9 +12,10 @@
       <RowDefinition Height="*"></RowDefinition>
       <RowDefinition Height="40"></RowDefinition>
       <RowDefinition Height="40"></RowDefinition>
+      <RowDefinition Height="40"></RowDefinition>
     </Grid.RowDefinitions>
 
-    <GroupBox Header="Paths" Grid.Row="0">
+    <GroupBox Header="Paths" Grid.Row="0" Margin="10">
 
       <StackPanel>
         <Label>Input .gha</Label>
@@ -70,7 +71,7 @@
       </StackPanel>
     </GroupBox>
 
-    <GroupBox Header="Settings" Grid.Row="1">
+    <GroupBox Header="Settings" Grid.Row="1" Margin="10">
       <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
           <RowDefinition Height ="50"></RowDefinition>
@@ -111,11 +112,11 @@
     </GroupBox>
 
 
-    <DockPanel Grid.Row ="2">
+    <DockPanel Grid.Row ="2" Margin="10,10,10,0">
       <Button>Run</Button>
     </DockPanel>
 
-    <Grid Grid.Row="3">
+    <Grid Grid.Row="3" Margin="10,0,10,0">
       <ProgressBar Minimum="0"
                    Maximum="100"
                    Name="pbStatus" />
