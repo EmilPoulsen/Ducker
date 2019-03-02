@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Ducker.Core;
+using System.ComponentModel;
 
 namespace Ducker.UI
 {
@@ -24,6 +26,9 @@ namespace Ducker.UI
     public partial class MainWindow : Window
     {
         public int InsertBindingHere { get; set; } = 50;
+
+        private DuckRunner _duckRunner;
+        private BackgroundWorker bw;
 
         public MainWindow()
         {
@@ -35,6 +40,20 @@ namespace Ducker.UI
             this.Title = string.Format("Ducker {0}", assemblyVersion);
             cmbColors.ItemsSource = typeof(Colors).GetProperties();
             this.pbStatus.Value = 50;
+
+            _duckRunner = new DuckRunner();
+            SetupBw();
+            
+        }
+
+        private void SetupBw()
+        {
+            //Background Worker code///
+            this.bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.DoWork += Bw_DoWork;
+            bw.ProgressChanged += Bw_ProgressChanged;
+            bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
         }
 
         private int IPhoneXWidth(double scale)
@@ -49,6 +68,51 @@ namespace Ducker.UI
             return (int)height;
         }
 
+
+        private void BtnRun_Click(object sender, RoutedEventArgs e)
+        {
+
+            if(!IsPathValid(_duckRunner.AssemblyPath))
+            {
+                System.Windows.MessageBox.Show(this, "Path not valid");
+                return;
+            }
+
+            bw.RunWorkerAsync();
+        }
+
+        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                IGhaReader reader = new RhinoHeadlessGhaReader();
+                IDocGenerator docGen = new EmuMdDocGenerator();
+                IDocWriter docWrite = new MarkDownDocWriter();
+                _duckRunner.Run(reader, docGen, docWrite);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
+        }
+
+        private bool IsPathValid(string path)
+        {
+            return !string.IsNullOrEmpty(path) && File.Exists(path);
+        }
+
         private void btnSetPath_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -58,6 +122,7 @@ namespace Ducker.UI
             {
                 string path = openFileDialog.FileName;
                 tbGhaPath.Text = path;
+                _duckRunner.AssemblyPath = path;
             }
 
             // do something
