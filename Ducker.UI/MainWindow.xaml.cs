@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Ducker.Core;
 using System.ComponentModel;
+using System.Threading;
 
 namespace Ducker.UI
 {
@@ -42,8 +43,17 @@ namespace Ducker.UI
             this.pbStatus.Value = 50;
 
             _duckRunner = new DuckRunner();
+            _duckRunner.Progress += DuckRunner_Progress;
             SetupBw();
             
+        }
+
+        private void DuckRunner_Progress(object sender, ProgressEventArgs e)
+        {
+            this.Dispatcher.Invoke(() => {
+                this.pbStatus.Value = e.Progress;
+                this.tblockStatus.Text = e.Message;
+            });
         }
 
         private void SetupBw()
@@ -78,7 +88,19 @@ namespace Ducker.UI
                 return;
             }
 
-            bw.RunWorkerAsync();
+            //Task.Run(() => RunDucker());
+            RunDucker();
+            Task.Run(() => {
+
+                Thread.Sleep(1000);
+
+                this.Dispatcher.Invoke(() => {
+                    tblockStatus.Text = "";
+                    pbStatus.Value = 0;
+                });
+            });
+
+            //bw.RunWorkerAsync();
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -95,10 +117,7 @@ namespace Ducker.UI
         {
             try
             {
-                IGhaReader reader = new RhinoHeadlessGhaReader();
-                IDocGenerator docGen = new EmuMdDocGenerator();
-                IDocWriter docWrite = new MarkDownDocWriter();
-                _duckRunner.Run(reader, docGen, docWrite);
+                RunDucker();
             }
             catch (Exception ex)
             {
@@ -106,6 +125,14 @@ namespace Ducker.UI
                 throw;
             }
             
+        }
+
+        private void RunDucker()
+        {
+            IGhaReader reader = new RhinoHeadlessGhaReader();
+            IDocGenerator docGen = new EmuMdDocGenerator();
+            IDocWriter docWrite = new MarkDownDocWriter();
+            _duckRunner.Run(reader, docGen, docWrite);
         }
 
         private bool IsPathValid(string path)

@@ -120,7 +120,7 @@
       <ProgressBar Minimum="0"
                    Maximum="100"
                    Name="pbStatus" />
-      <TextBlock Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}"
+      <TextBlock Name="tblockStatus"
               HorizontalAlignment="Center"
               VerticalAlignment="Center" />
     </Grid>
