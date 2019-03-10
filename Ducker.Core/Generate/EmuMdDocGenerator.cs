@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
+    /// <summary>
+    /// Generates a markdown with Emu style.
+    /// </summary>
     public class EmuMdDocGenerator : MarkDownDocGenerator
     {
+        /// <summary>
+        /// Creates the contents of the document based on components and the export settings
+        /// </summary>
+        /// <param name="components">The components included in the gha.</param>
+        /// <param name="settings">The output settings.</param>
+        /// <returns>Content of the document.</returns>
         public override DocumentContent Create(List<DuckerComponent> components, ExportSettings settings)
         {
             DocumentContent docContent = new DocumentContent();
