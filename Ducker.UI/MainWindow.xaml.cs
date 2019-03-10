@@ -90,6 +90,7 @@ namespace Ducker.UI
 
             //Task.Run(() => RunDucker());
             RunDucker();
+
             Task.Run(() => {
 
                 Thread.Sleep(1000);
@@ -127,8 +128,21 @@ namespace Ducker.UI
             
         }
 
+        private ExportSettings CollectOptions()
+        {
+            ExportSettings s = new ExportSettings();
+            s.Description = this.cbxDescription.IsChecked.Value;
+            s.ExportIcons = this.cbxExportIcons.IsChecked.Value;
+            s.IgnoreHidden = this.cbxIgnoreHidden.IsChecked.Value;
+            s.Name = this.cbxName.IsChecked.Value;
+            s.NickName = this.cbxNickName.IsChecked.Value;
+            s.Parameters = this.cbxParameters.IsChecked.Value;
+            return s;
+        }
+
         private void RunDucker()
         {
+            ExportSettings settings = CollectOptions();
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = new EmuMdDocGenerator();
             IDocWriter docWrite = new MarkDownDocWriter();

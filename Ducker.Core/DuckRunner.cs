@@ -23,6 +23,11 @@ namespace Ducker.Core
 
         public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite)
         {
+            this.Run(reader, docGen, docWrite, ExportSettings.Default);
+        }
+
+        public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite, ExportSettings settings)
+        {
             OnProgress("Extracting..", 0);
             var duckers = reader.Read(this.AssemblyPath);
             OnProgress("Creating document..", 33);

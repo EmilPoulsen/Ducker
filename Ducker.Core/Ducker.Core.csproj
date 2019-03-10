@@ -45,6 +45,7 @@
     <Compile Include="DuckerComponent.cs" />
     <Compile Include="DuckerParam.cs" />
     <Compile Include="DuckRunner.cs" />
+    <Compile Include="ExportSettings.cs" />
     <Compile Include="Generate\EmuMdDocGenerator.cs" />
     <Compile Include="Generate\IDocGenerator.cs" />
     <Compile Include="Write\IDocWriter.cs" />

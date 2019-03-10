@@ -17,7 +17,10 @@ namespace Ducker.Core
             }
         }
 
-        public abstract DocumentContent Create(List<DuckerComponent> components);
+        public DocumentContent Create(List<DuckerComponent> components)
+        {
+            return this.Create(components, ExportSettings.Default);
+        }
 
         protected string GenerateParamTable(List<DuckerParam> compParameter)
         {
@@ -90,5 +93,6 @@ namespace Ducker.Core
             return components.Select(c => c.Icon).ToList();
         }
 
+        public abstract DocumentContent Create(List<DuckerComponent> components, ExportSettings settings);
     }
 }

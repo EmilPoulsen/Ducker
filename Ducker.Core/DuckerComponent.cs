@@ -18,6 +18,8 @@ namespace Ducker.Core
         public string NickName { get; set; }
         public Bitmap Icon { get; set; }
         
+        public string Exposure { get; set; }
+
         public string GetNameWithoutSpaces()
         {
             return this.Name.Replace(" ", string.Empty);

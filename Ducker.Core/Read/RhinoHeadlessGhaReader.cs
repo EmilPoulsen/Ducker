@@ -102,7 +102,8 @@ namespace Ducker.Core
                         Name = c.Name,
                         NickName = c.NickName,
                         Description = c.Description,
-                        Icon = icon
+                        Icon = icon,
+                         Exposure = c.Exposure.ToString()
                     };
 
                     dynamic parameters = c.Params;

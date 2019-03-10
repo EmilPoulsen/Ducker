@@ -99,13 +99,13 @@
         </ComboBox>
       </StackPanel>
 
-        <CheckBox Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll2" IsChecked="True">Ignore hidded</CheckBox>
-        <CheckBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll3" IsChecked="True">Export Icons</CheckBox>
+        <CheckBox Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" Name="cbxIgnoreHidden" IsChecked="False">Ignore hidded</CheckBox>
+        <CheckBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Name="cbxExportIcons" IsChecked="True">Export Icons</CheckBox>
         
-        <CheckBox Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll4" IsChecked="True">Name</CheckBox>
-        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll5" IsChecked="True">Nick name</CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="0" Margin="0,0,0,0" Name="cbxCheckAll6" IsChecked="True">Description</CheckBox>
-        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Name="cbxCheckAll7" IsChecked="True">Parameters</CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="0" Margin="0,0,0,0" Name="cbxName" IsChecked="True">Name</CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Name="cbxNickName" IsChecked="True">Nick name</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="0" Margin="0,0,0,0" Name="cbxDescription" IsChecked="True">Description</CheckBox>
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Name="cbxParameters" IsChecked="True">Parameters</CheckBox>
       </Grid>
  
         

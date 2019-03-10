@@ -8,14 +8,16 @@ namespace Ducker.Core
 {
     public class EmuMdDocGenerator : MarkDownDocGenerator
     {
-        public override DocumentContent Create(List<DuckerComponent> components)
+        public override DocumentContent Create(List<DuckerComponent> components, ExportSettings settings)
         {
             DocumentContent docContent = new DocumentContent();
-            //StringBuilder
             StringBuilder builder = new StringBuilder();
 
             foreach (var component in components)
             {
+                if (component.Exposure == "hidden" && settings.IgnoreHidden)
+                    continue;
+
                 builder.AppendLine(string.Format("{0} {1}", Header(component.Name), Image("",
                     docContent.RelativePathIcons, component.GetNameWithoutSpaces())));
                 builder.Append(Paragraph(Bold(nameof(component.Name) + ":") + " " + component.Name));
