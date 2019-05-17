@@ -26,7 +26,8 @@ namespace Ducker.Core
         {
             if (initialized)
             {
-                throw new InvalidOperationException("AssemblyInitialize should only be called once");
+                return;
+                //throw new InvalidOperationException("AssemblyInitialize should only be called once");
             }
             initialized = true;
 
@@ -65,7 +66,7 @@ namespace Ducker.Core
         /// <returns>List of components included in the .gha file.</returns>
         public List<DuckerComponent> Read(string pathToDll)
         {
-            AssemblyInitialize();
+            //AssemblyInitialize();
 
             var DLL = Assembly.LoadFile(pathToDll);
             string folder = Path.GetDirectoryName(pathToDll) + @"\";

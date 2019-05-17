@@ -40,7 +40,7 @@ namespace Ducker.UI
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Title = string.Format("Ducker {0}", assemblyVersion);
             cmbColors.ItemsSource = typeof(Colors).GetProperties();
-            this.pbStatus.Value = 50;
+            this.pbStatus.Value = 0;
 
             _duckRunner = new DuckRunner();
             _duckRunner.Progress += DuckRunner_Progress;
@@ -88,8 +88,9 @@ namespace Ducker.UI
                 return;
             }
 
-            SimpleDelegate d = new SimpleDelegate(RunDucker);
-            d.BeginInvoke(null,null);
+            RunDucker();
+            //SimpleDelegate d = new SimpleDelegate(RunDucker);
+            //d.BeginInvoke(null,null);
 
             //RunDucker();
             //bw.RunWorkerAsync();
@@ -153,7 +154,14 @@ namespace Ducker.UI
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = new EmuMdDocGenerator();
             IDocWriter docWrite = new MarkDownDocWriter();
-            _duckRunner.Run(reader, docGen, docWrite);
+
+            _duckRunner.TryInitializeRhino(reader);
+
+            Task.Run(() => {
+                _duckRunner.Run(reader, docGen, docWrite);
+                Thread.Sleep(1000);
+                DuckRunner_Progress(this, new ProgressEventArgs("", 0));
+            });
         }
 
         private bool IsPathValid(string path)
