@@ -87,21 +87,8 @@ namespace Ducker.UI
                 System.Windows.MessageBox.Show(this, "Path not valid");
                 return;
             }
-
-            //Task.Run(() => RunDucker());
-            RunDucker();
-
-            Task.Run(() => {
-
-                Thread.Sleep(1000);
-
-                this.Dispatcher.Invoke(() => {
-                    tblockStatus.Text = "";
-                    pbStatus.Value = 0;
-                });
-            });
-
-            //bw.RunWorkerAsync();
+            //RunDucker();
+            bw.RunWorkerAsync();
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -131,12 +118,14 @@ namespace Ducker.UI
         private ExportSettings CollectOptions()
         {
             ExportSettings s = new ExportSettings();
-            s.Description = this.cbxDescription.IsChecked.Value;
-            s.ExportIcons = this.cbxExportIcons.IsChecked.Value;
-            s.IgnoreHidden = this.cbxIgnoreHidden.IsChecked.Value;
-            s.Name = this.cbxName.IsChecked.Value;
-            s.NickName = this.cbxNickName.IsChecked.Value;
-            s.Parameters = this.cbxParameters.IsChecked.Value;
+            this.Dispatcher.Invoke(() => {
+                s.Description = this.cbxDescription.IsChecked.Value;
+                s.ExportIcons = this.cbxExportIcons.IsChecked.Value;
+                s.IgnoreHidden = this.cbxIgnoreHidden.IsChecked.Value;
+                s.Name = this.cbxName.IsChecked.Value;
+                s.NickName = this.cbxNickName.IsChecked.Value;
+                s.Parameters = this.cbxParameters.IsChecked.Value;
+            });
             return s;
         }
 
@@ -146,7 +135,9 @@ namespace Ducker.UI
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = new EmuMdDocGenerator();
             IDocWriter docWrite = new MarkDownDocWriter();
-            _duckRunner.Run(reader, docGen, docWrite);
+            this.Dispatcher.Invoke(() => {
+                _duckRunner.Run(reader, docGen, docWrite);
+            });
         }
 
         private bool IsPathValid(string path)
