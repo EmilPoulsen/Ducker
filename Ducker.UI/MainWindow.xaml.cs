@@ -84,11 +84,29 @@ namespace Ducker.UI
 
             if(!IsPathValid(_duckRunner.AssemblyPath))
             {
-                System.Windows.MessageBox.Show(this, "Path not valid");
+                ShowMessageBox("Path not valid");
                 return;
             }
+
+            SimpleDelegate d = new SimpleDelegate(RunDucker);
+            d.BeginInvoke(null,null);
+
             //RunDucker();
-            bw.RunWorkerAsync();
+            //bw.RunWorkerAsync();
+            Task.Run(() => {
+                //Thread.Sleep(1000);
+                //this.Dispatcher.Invoke(() => {
+                    //RunDucker();
+                //});
+            });
+        }
+
+        public delegate void SimpleDelegate();
+
+
+        private void ShowMessageBox(string message)
+        {
+            System.Windows.MessageBox.Show(this, message);
         }
 
         private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -109,8 +127,8 @@ namespace Ducker.UI
             }
             catch (Exception ex)
             {
-
-                throw;
+                ShowMessageBox($"Fatal error: {ex.Message}{Environment.NewLine}Ducker will terminate." );
+                return;
             }
             
         }
@@ -135,9 +153,7 @@ namespace Ducker.UI
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = new EmuMdDocGenerator();
             IDocWriter docWrite = new MarkDownDocWriter();
-            this.Dispatcher.Invoke(() => {
-                _duckRunner.Run(reader, docGen, docWrite);
-            });
+            _duckRunner.Run(reader, docGen, docWrite);
         }
 
         private bool IsPathValid(string path)
