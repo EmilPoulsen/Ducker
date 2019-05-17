@@ -43,6 +43,11 @@ namespace Ducker.Core
         public bool Parameters { get; set; }
 
         /// <summary>
+        /// Document writer type.
+        /// </summary>
+        public Type DocWriter { get; set; }
+
+        /// <summary>
         /// Default settings: Description = true, ExportIcons = true, IgnoreHidden = true, 
         /// Name = true, NickName = true, Parameters = true
         /// </summary>

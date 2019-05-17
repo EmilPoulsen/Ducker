@@ -39,13 +39,41 @@ namespace Ducker.UI
             this.Height = 600;//IPhoneXHeigh(scale);
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Title = string.Format("Ducker {0}", assemblyVersion);
-            cmbColors.ItemsSource = typeof(Colors).GetProperties();
+            PopulateComboBoxWithIDocWriterTypes();
             this.pbStatus.Value = 0;
 
             _duckRunner = new DuckRunner();
             _duckRunner.Progress += DuckRunner_Progress;
             SetupBw();
             
+        }
+
+        /// <summary>
+        /// Performs reflection of the loaded assemblies and finds all types
+        /// that implements IDocWriter and add these to the CheckBox
+        /// </summary>
+        private void PopulateComboBoxWithIDocGeneratorTypes()
+        {
+            var types = GetIDocGeneratorTypes();
+            cmbColors.ItemsSource = types;
+            if (types.Count > 0)
+            {
+                cmbColors.SelectedIndex = 0;
+            }
+        }
+
+        /// <summary>
+        /// Performs reflection of the loaded assemblies and finds all types
+        /// that implements IDocWriter
+        /// </summary>
+        private List<Type> GetIDocGeneratorTypes()
+        {
+            var type = typeof(IDocGenerator);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface)
+                .ToList();
+            return types;
         }
 
         private void DuckRunner_Progress(object sender, ProgressEventArgs e)
@@ -144,6 +172,7 @@ namespace Ducker.UI
                 s.Name = this.cbxName.IsChecked.Value;
                 s.NickName = this.cbxNickName.IsChecked.Value;
                 s.Parameters = this.cbxParameters.IsChecked.Value;
+                s.DocWriter = this.cmbColors.SelectedItem as Type;
             });
             return s;
         }
@@ -152,7 +181,8 @@ namespace Ducker.UI
         {
             ExportSettings settings = CollectOptions();
             IGhaReader reader = new RhinoHeadlessGhaReader();
-            IDocGenerator docGen = new EmuMdDocGenerator();
+            IDocGenerator docGen = Activator.CreateInstance(settings.DocWriter)
+                as IDocGenerator;
             IDocWriter docWrite = new MarkDownDocWriter();
 
             _duckRunner.TryInitializeRhino(reader);

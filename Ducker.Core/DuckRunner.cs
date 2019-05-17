@@ -45,6 +45,13 @@ namespace Ducker.Core
             this.Run(reader, docGen, docWrite, ExportSettings.Default);
         }
 
+        public void TryInitializeRhino(IGhaReader reader)
+        {
+            var rhino = reader as RhinoHeadlessGhaReader;
+            OnProgress("Starting Rhino..", 0);
+            rhino.AssemblyInitialize();            
+        }
+        
         /// <summary>
         /// Call this method to start the process.
         /// </summary>
@@ -54,7 +61,7 @@ namespace Ducker.Core
         /// <param name="settings">Settings to apply.</param>
         public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite, ExportSettings settings)
         {
-            OnProgress("Extracting..", 0);
+            OnProgress("Extracting..", 15);
             var duckers = reader.Read(this.AssemblyPath);
             OnProgress("Creating document..", 33);
             var content = docGen.Create(duckers);
