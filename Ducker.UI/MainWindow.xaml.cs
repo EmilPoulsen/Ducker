@@ -104,9 +104,8 @@ namespace Ducker.UI
                 return;
             }
 
-            RunDucker();
             Task.Run(() => {
-                
+            RunDucker();    
             });
         }
         
@@ -138,10 +137,12 @@ namespace Ducker.UI
                 as IDocGenerator;
             IDocWriter docWrite = new MarkDownDocWriter();
 
-            DuckRunner_Progress(this, new ProgressEventArgs("Starting Rhino", 0));
+            DuckRunner_Progress(this, new ProgressEventArgs("Starting Rhino...", 0));
 
-            _duckRunner.TryInitializeRhino(reader);
-
+            this.Dispatcher.Invoke(() => {
+                _duckRunner.TryInitializeRhino(reader);
+            });
+            
             Task.Run(() => {
                 _duckRunner.Run(reader, docGen, docWrite);
                 Thread.Sleep(1000);
