@@ -26,11 +26,8 @@ namespace Ducker.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int InsertBindingHere { get; set; } = 50;
-
         private DuckRunner _duckRunner;
-        private BackgroundWorker bw;
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -39,13 +36,11 @@ namespace Ducker.UI
             this.Height = 600;//IPhoneXHeigh(scale);
             string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Title = string.Format("Ducker {0}", assemblyVersion);
-            PopulateComboBoxWithIDocWriterTypes();
+            PopulateComboBoxWithIDocGeneratorTypes();
             this.pbStatus.Value = 0;
 
             _duckRunner = new DuckRunner();
             _duckRunner.Progress += DuckRunner_Progress;
-            SetupBw();
-            
         }
 
         /// <summary>
@@ -84,32 +79,25 @@ namespace Ducker.UI
             });
         }
 
-        private void SetupBw()
-        {
-            //Background Worker code///
-            this.bw = new BackgroundWorker();
-            bw.WorkerReportsProgress = true;
-            bw.DoWork += Bw_DoWork;
-            bw.ProgressChanged += Bw_ProgressChanged;
-            bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
-        }
-
         private int IPhoneXWidth(double scale)
         {
             double width =  1125 * scale;
             return (int) width;
         }
 
-        private int IPhoneXHeigh(double scale)
+        private int IPhoneXHeight(double scale)
         {
             double height = 2436 * scale;
             return (int)height;
         }
 
-
+        /// <summary>
+        /// Button that starts the whole process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnRun_Click(object sender, RoutedEventArgs e)
         {
-
             if(!IsPathValid(_duckRunner.AssemblyPath))
             {
                 ShowMessageBox("Path not valid");
@@ -117,49 +105,14 @@ namespace Ducker.UI
             }
 
             RunDucker();
-            //SimpleDelegate d = new SimpleDelegate(RunDucker);
-            //d.BeginInvoke(null,null);
-
-            //RunDucker();
-            //bw.RunWorkerAsync();
             Task.Run(() => {
-                //Thread.Sleep(1000);
-                //this.Dispatcher.Invoke(() => {
-                    //RunDucker();
-                //});
+                
             });
         }
-
-        public delegate void SimpleDelegate();
-
-
+        
         private void ShowMessageBox(string message)
         {
             System.Windows.MessageBox.Show(this, message);
-        }
-
-        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void Bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void Bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                RunDucker();
-            }
-            catch (Exception ex)
-            {
-                ShowMessageBox($"Fatal error: {ex.Message}{Environment.NewLine}Ducker will terminate." );
-                return;
-            }
-            
         }
 
         private ExportSettings CollectOptions()
@@ -184,6 +137,8 @@ namespace Ducker.UI
             IDocGenerator docGen = Activator.CreateInstance(settings.DocWriter)
                 as IDocGenerator;
             IDocWriter docWrite = new MarkDownDocWriter();
+
+            DuckRunner_Progress(this, new ProgressEventArgs("Starting Rhino", 0));
 
             _duckRunner.TryInitializeRhino(reader);
 
@@ -210,8 +165,6 @@ namespace Ducker.UI
                 tbGhaPath.Text = path;
                 _duckRunner.AssemblyPath = path;
             }
-
-            // do something
         }
     }
 }
