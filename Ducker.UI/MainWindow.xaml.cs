@@ -34,8 +34,9 @@ namespace Ducker.UI
             double scale = 0.3;
             this.Width = IPhoneXWidth(scale);
             this.Height = 600;//IPhoneXHeigh(scale);
-            string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            this.Title = string.Format("Ducker {0}", assemblyVersion);
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            string assemblyVersion = $"{version.Major}.{version.Minor}.{version.Build}";
+            this.Title = string.Format(" Ducker {0}", assemblyVersion);
             PopulateComboBoxWithIDocGeneratorTypes();
             this.pbStatus.Value = 0;
 
