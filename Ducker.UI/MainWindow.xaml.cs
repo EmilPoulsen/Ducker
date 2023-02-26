@@ -33,7 +33,7 @@ namespace Ducker.UI
             InitializeComponent();
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             string assemblyVersion = $"{version.Major}.{version.Minor}.{version.Build}";
-            this.Title = string.Format(" Ducker {0}", assemblyVersion);
+            this.Title = string.Format(" Ducker {0} (beta)", assemblyVersion);
             PopulateComboBoxWithIDocGeneratorTypes();
             this.pbStatus.Value = 0;
 
@@ -82,17 +82,24 @@ namespace Ducker.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnRun_Click(object sender, RoutedEventArgs e)
+        private async void BtnRun_Click(object sender, RoutedEventArgs e)
         {
-            if(!IsPathValid(_duckRunner.AssemblyPath))
+            try
             {
-                ShowMessageBox("Path not valid");
-                return;
-            }
+                if (!IsPathValid(_duckRunner.AssemblyPath))
+                {
+                    ShowMessageBox("Path not valid");
+                    return;
+                }
 
-            Task.Run(() => {
-            RunDucker();    
-            });
+                await RunDucker();
+
+            }
+            catch (Exception x)
+            {
+                ShowMessageBox($"Something bad happened: {x.Message}");
+                DuckRunner_Progress(this, new ProgressEventArgs("", 0));
+            }
         }
         
         private void ShowMessageBox(string message)
@@ -115,7 +122,7 @@ namespace Ducker.UI
             return s;
         }
 
-        private void RunDucker()
+        private async Task RunDucker()
         {
             ExportSettings settings = CollectOptions();
             IGhaReader reader = new RhinoHeadlessGhaReader();
@@ -125,13 +132,15 @@ namespace Ducker.UI
 
             DuckRunner_Progress(this, new ProgressEventArgs("Starting Rhino...", 0));
 
-            this.Dispatcher.Invoke(() => {
+            await Task.Run(() =>
+            {
                 _duckRunner.TryInitializeRhino(reader);
             });
-            
-            Task.Run(() => {
+
+            await Task.Run(() =>
+            {
                 _duckRunner.Run(reader, docGen, docWrite);
-                Thread.Sleep(1000);
+                Thread.Sleep(2000); //Show the complete msg in progress bar for 1 sec.
                 DuckRunner_Progress(this, new ProgressEventArgs("", 0));
             });
         }

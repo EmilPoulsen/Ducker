@@ -68,7 +68,7 @@ namespace Ducker.Core
             OnProgress("Saving document..", 66); 
             string pathToOutput = CreateOutputPath(this.AssemblyPath, docGen.FileExtension);
             docWrite.Write(content, pathToOutput);
-            OnProgress("Done..", 100);
+            OnProgress("Done! 🎉", 100);
         }
 
         /// <summary>
