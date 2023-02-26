@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ducker.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Icon="duck_64x64_NVp_icon.ico">
+        Title="Ducker" Height="450" Width="450" Icon="duck_64x64_NVp_icon.ico">
   <Grid ShowGridLines="false">
     <Grid.RowDefinitions>
-      <RowDefinition></RowDefinition>
-      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="*" MinHeight="110"></RowDefinition>
+      <RowDefinition Height="*" MinHeight="200"></RowDefinition>
       <RowDefinition Height="40"></RowDefinition>
       <RowDefinition Height="40"></RowDefinition>
       <RowDefinition Height="40"></RowDefinition>
@@ -27,47 +27,7 @@
           <TextBox Name="tbGhaPath" Margin="0,5,0,0" Width="Auto" Height ="25"
                    MinHeight="25">
           </TextBox>
-        </DockPanel>
-
-        <Label>Rhino folder</Label>
-        <DockPanel Margin="0" >
-          <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
-        ToolTip="Set the path for the output file.">
-            ...
-          </Button>
-          <TextBox Name="tbRhinoPath" Margin="0,5,0,0" Width="Auto" Height ="25"
-                   MinHeight="25">
-            C:\Program Files\Rhino 6
-          </TextBox>
-        </DockPanel>
-
-        <Grid>
-
-          <Label Margin="0,0,0,0" Content="Output path"
-                ToolTip="The directory of the output files the app produce."/>
-          <DockPanel x:Name="attributesAreaPanel"
-                 HorizontalAlignment="Right">
-            <Label Margin="0" Content="Relative to .gha"/>
-            <CheckBox  Margin="0,5,0,0" Name="cbxCheckAll" IsChecked="True"></CheckBox>
-          </DockPanel>
-
-          
-        </Grid>
-
-
-        
-        <DockPanel Margin="0" >
-          <Button Margin="0,5,0,0" Height="25" Width="35" Click="btnSetPath_Click"
-        ToolTip="Set the path for the output file.">
-            ...
-          </Button>
-
-          <TextBox Name="tbOutputPath" Margin="0,5,0,0" Width="Auto" Height ="25"
-                   MinHeight="25">
-            ducker
-          </TextBox>
-        </DockPanel>
-
+        </DockPanel>        
       </StackPanel>
     </GroupBox>
 
@@ -112,7 +72,7 @@
     </GroupBox>
 
 
-    <DockPanel Grid.Row ="2" Margin="10,10,10,0">
+    <DockPanel Grid.Row ="2" Margin="10,10,10,10">
       <Button Click="BtnRun_Click">Run</Button>
     </DockPanel>
 

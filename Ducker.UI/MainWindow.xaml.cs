@@ -31,9 +31,6 @@ namespace Ducker.UI
         public MainWindow()
         {
             InitializeComponent();
-            double scale = 0.3;
-            this.Width = IPhoneXWidth(scale);
-            this.Height = 600;//IPhoneXHeigh(scale);
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             string assemblyVersion = $"{version.Major}.{version.Minor}.{version.Build}";
             this.Title = string.Format(" Ducker {0}", assemblyVersion);
@@ -78,18 +75,6 @@ namespace Ducker.UI
                 this.pbStatus.Value = e.Progress;
                 this.tblockStatus.Text = e.Message;
             });
-        }
-
-        private int IPhoneXWidth(double scale)
-        {
-            double width =  1125 * scale;
-            return (int) width;
-        }
-
-        private int IPhoneXHeight(double scale)
-        {
-            double height = 2436 * scale;
-            return (int)height;
         }
 
         /// <summary>
