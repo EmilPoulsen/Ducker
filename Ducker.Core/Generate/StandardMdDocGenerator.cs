@@ -9,7 +9,7 @@ namespace Ducker.Core
     /// <summary>
     /// Generates a markdown with Emu style.
     /// </summary>
-    public class EmuMdDocGenerator : MarkDownDocGenerator
+    public class StandardMdDocGenerator : MarkDownDocGenerator
     {
         /// <summary>
         /// Creates the contents of the document based on components and the export settings

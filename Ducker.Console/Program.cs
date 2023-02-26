@@ -23,7 +23,7 @@ namespace Ducker
             string pathToDll = @"C:\Users\emil\Documents\GitHub\Emu\Emu\Emu.Grasshopper\bin\Release\Emu.Grasshopper.gha";
             
             IGhaReader reader = new RhinoHeadlessGhaReader();
-            IDocGenerator docGen = new EmuMdDocGenerator();
+            IDocGenerator docGen = new StandardMdDocGenerator();
             IDocWriter docWrite = new MarkDownDocWriter();
 
             DuckRunner ducker = new DuckRunner(pathToDll);

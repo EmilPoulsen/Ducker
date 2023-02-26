@@ -67,7 +67,7 @@ namespace Ducker.UI
             var type = typeof(IDocGenerator);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface)
+                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
                 .ToList();
             return types;
         }
