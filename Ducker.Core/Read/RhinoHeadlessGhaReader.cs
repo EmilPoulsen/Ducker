@@ -40,8 +40,8 @@ namespace Ducker.Core
             // Set path to rhino system directory
             string envPath = Environment.GetEnvironmentVariable("path");
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            rhinoSystemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
-            grasshopperSystemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "Plug-ins", "Grasshopper");
+            rhinoSystemDir = System.IO.Path.Combine(programFiles, "Rhino 7", "System");
+            grasshopperSystemDir = System.IO.Path.Combine(programFiles, "Rhino 7", "Plug-ins", "Grasshopper");
 
             if (!System.IO.Directory.Exists(rhinoSystemDir))
             {
