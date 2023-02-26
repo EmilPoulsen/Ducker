@@ -23,12 +23,17 @@ namespace Ducker.Core
         {
             try
             {
+                string dir = Path.GetDirectoryName(path);
+                if(!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
                 File.WriteAllText(path, docContent.Document);
                 SaveIcons(docContent, path);
             }
             catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
 

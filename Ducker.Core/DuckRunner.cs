@@ -68,7 +68,7 @@ namespace Ducker.Core
             OnProgress("Saving document..", 66); 
             string pathToOutput = CreateOutputPath(this.AssemblyPath, docGen.FileExtension);
             docWrite.Write(content, pathToOutput);
-            OnProgress("Done! 🎉", 100);
+            OnProgress("Done! Output folder is found next to input gha.", 100);
         }
 
         /// <summary>
@@ -79,7 +79,14 @@ namespace Ducker.Core
         /// <returns>The path where the output file will be saved.</returns>
         private string CreateOutputPath(string pathToDll, string extension)
         {
-            string combined = Path.ChangeExtension(pathToDll, extension);
+            //Get file name, and change extension
+            string fileName = Path.GetFileName(pathToDll);
+            fileName = Path.ChangeExtension(fileName, extension);
+
+            //Get directory, add subfolder "ducker".
+            string directory = Path.GetDirectoryName(pathToDll);
+            string combined = Path.Combine(directory, "ducker", fileName);
+
             return combined;
         }
 
