@@ -5,9 +5,13 @@ _Docs generator for .gha_
 
 ## Intro
 
-Ducker is a fast, easy-to-use and hackable documentation generator for Grasshopper assemblies (.gha). You simply feed Ducker with a gha, and out comes styled text documents containing all the information embedded in the gha file. 
+Ducker is a fast, easy-to-use and hackable documentation generator for Grasshopper assemblies (.gha). You simply feed Ducker a .gha file, and out comes styled text documents containing all the information embedded in the gha file. 
 
 ## What is Ducker used for?
+Ducker is used for extracting documentation data from .gha files, such as component names, descriptions, icons, inputs and outputs. The extracted documentation can then be published externally (online for instance), so that it can be accessed outside of Grasshopper.
+
+Here's the long version;
+
 Let's say you're developing a [Grasshopper plugin](https://developer.rhino3d.com/guides/grasshopper/your-first-component-windows/). You create a new component by inheriting from the `GH_Component` class, and pass in  name, nickname and description arguments to the base constructor:
 ```csharp
 public GH_ReactionForces()
@@ -17,7 +21,7 @@ public GH_ReactionForces()
 }
 ```
 
-You register inputs to the component:
+Next, you register inputs to the component:
 ```csharp
 protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager) 
 {
@@ -50,15 +54,13 @@ protected override System.Drawing.Bitmap Icon
 
 Great! Given that you provided sensible names and descriptions to your component, you've created a valuable piece of documentation that will help your users to navigate in using your Grasshopper plugin.
 
-But what if you wanted to make this information available outside of Grasshopper? Maybe you want to give users a glimpse of what the plugin offers, or write a complete index of all components included in your plugin. Perhaps in the form of a website (html), a Github repo (markdown) or why not a Word document (.doc)?
+But what if you wanted to make this information available outside of Grasshopper? Maybe you want to give users a glimpse of what the plugin offers, or write a complete reference index of all components included in your plugin. Perhaps in the form of a website (html), a Github readme (markdown) or why not a Word document (.doc)?
 
-It would be a bummer having to copy or write all those carefully crafted sentences from you GH plugin again in a separate text file. And what if you fix a typo - then you would have to fix the typo twice!
+It would be a bummer having to copy or write all those carefully crafted sentences from you GH plugin again in a separate text file. And what if you discover and fix a typo - then you would have to fix the typo twice!
 
-This is where Ducker can help! Using Ducker, you can extract this information and automatically export.
+This is where Ducker can help! Using Ducker, you can extract this information and automatically export it into a text file.
 
-Writing documentation sucks, but writing the same documentation twice in two different places sucks even more. Let's not do that 
-
-## Example
+## Example output
 Below is an example of using the `StandardMdWriter` exporter. You can see the full example here.
 
 **Name:** Reaction Forces  
@@ -106,7 +108,7 @@ The code
 Contributions are very much welcome! Some spontaneous ideas:
 - More output formats, for instance html and word docs.
 - Refine the UI. Perhaps ditch WPF to make it runnable on mac.
-- Console app implementation.
+- Console app implementation, so that it can be integrated in CI/CD pipelines.
 
 ## Create your own output formats
 While Ducker comes with a markdown exporter, you can easily create your own formats and document generators by implementing the `IDocGenerator` interface.
