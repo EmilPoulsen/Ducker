@@ -5,14 +5,14 @@ _Docs generator for .gha_
 
 ## Intro
 
-Ducker is a fast, easy-to-use and hackable documentation generator for Grasshopper assemblies (.gha). You simply feed Ducker a .gha file, and out comes styled text documents containing all the information embedded in the gha file. 
+Ducker is a fast, easy-to-use and hackable documentation generator for Grasshopper assemblies (.gha). You simply feed Ducker with a .gha file, and out comes a styled text document containing the information embedded in the gha file. 
 
 ## What is Ducker used for?
 Ducker is used for extracting documentation data from .gha files, such as component names, descriptions, icons, inputs and outputs. The extracted documentation can then be published externally (online for instance), so that it can be accessed outside of Grasshopper.
 
 Here's the long version;
 
-Let's say you're developing a [Grasshopper plugin](https://developer.rhino3d.com/guides/grasshopper/your-first-component-windows/). You create a new component by inheriting from the `GH_Component` class, and pass in  name, nickname and description arguments to the base constructor:
+Let's say you're developing a [Grasshopper plugin](https://developer.rhino3d.com/guides/grasshopper/your-first-component-windows/). You create a new component by inheriting from the `GH_Component` class, and pass in name, nickname and description arguments to the base constructor:
 ```csharp
 public GH_ReactionForces()
     : base("Reaction Forces", "ReactForce", "View the reaction forces in of model", "Emu", "Analysis") 
@@ -61,7 +61,7 @@ It would be a bummer having to copy or write all those carefully crafted sentenc
 This is where Ducker can help! Using Ducker, you can extract this information and automatically export it into a text file.
 
 ## Example output
-Below is an example of using the `StandardMdWriter` exporter. You can see the full example here.
+Below is an example of using the `StandardMdDocGenerator` exporter. You can see the full example [here](https://github.com/EmilPoulsen/Emu.Resources/tree/master/reference).
 
 **Name:** Reaction Forces  
 **NickName:** ReactForce  
@@ -79,39 +79,39 @@ Below is an example of using the `StandardMdWriter` exporter. You can see the fu
 | Moments | Mom | Moments |
 | Vertical | Vert | Sum of vertical reaction forces [N]. |
 
-## How can can I use ducker?
-Easiest way to use Ducker is to download the latest release. Please note that it requires Rhino 7 and Windows .NET Framework 4.8 to run. Follow these instructions:
-- Download the file
+## How can can I use Ducker?
+Easiest way to use Ducker is to download the latest release. **Please note that it requires Rhino 7 and Windows .NET Framework 4.8 installed to run.** Follow these instructions:
+- Download the latest release from [here](https://github.com/EmilPoulsen/Ducker/releases).
 - Unblock the zip
-- Unzip
+- Unzip the file
 - Double click on the Ducker.exe file.
-- Select the GHA you want to extract docs from.
+- Select the .gha file you want to extract docs from.
 - Hit the "Run button."
 - The output will be placed in a folder named "ducker" next to the selected gha file.
 
-IMPORTANT NOTE: Ducker is in beta, meaning the code can contain errors and bugs. If you come across anything odd behavior, please report it by creating a new issue in this repository.
+Alternatively, you can clone the repo and build the project yourself using Visual Studio 2022. `Ducker.UI` is the executible WPF application tha you see in the demo below.
+
+**IMPORTANT NOTE:** Ducker is in beta, meaning the code most likely contain errors and bugs. If you come across any odd behavior, please report it by creating a [new issue](https://github.com/EmilPoulsen/Ducker/issues) in this repository.
 
 ## Demo
 
 ![ducker demo](Meta/ducker-demo.gif)
-_Quick and dirty example of how to extract documentation of of a Grasshopper plugin using Ducker._
+_Quick and dirty example of how to extract documentation of a Grasshopper plugin using Ducker._
 
 ## Who is Ducker for?
 Ducker us useful for Grasshopper plugin developers who don't want to write the same documentation twice.
 
 ## How does Ducker work?
-Ducker uses reflection to load the contents of the GHA. Because it needs to load both RhinoCommon and Grasshopper, .
-
-The code
+Ducker uses a combination of reflection and Rhino.Inside to open and extract the contents of the GHA. This means that Rhino 7 must be installed on the machine it runs on for it to work.
 
 ## Contribute
-Contributions are very much welcome! Some spontaneous ideas:
+Contributions are very much welcome! Some spontaneous ideas about entry points:
 - More output formats, for instance html and word docs.
 - Refine the UI. Perhaps ditch WPF to make it runnable on mac.
 - Console app implementation, so that it can be integrated in CI/CD pipelines.
 
 ## Create your own output formats
-While Ducker comes with a markdown exporter, you can easily create your own formats and document generators by implementing the `IDocGenerator` interface.
+The current version of Ducker only comes with a built in markdown exporter, but you can easily create your own formats and document generators by implementing the `IDocGenerator` interface:
 
 ```csharp
 /// <summary>
@@ -134,7 +134,7 @@ public interface IDocGenerator
 }
 ```
 
-Check out the `MarkDownDocGenerator` to see an example of how this interface can be implemented.
+Check out the [`MarkDownDocGenerator`](https://github.com/EmilPoulsen/Ducker/blob/master/Ducker.Core/Generate/MarkDownDocGenerator.cs) to see an example of how this interface can be implemented.
 
 ## License
 [MIT](/LICENSE)
