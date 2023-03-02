@@ -81,7 +81,7 @@ Below is an example of using the `StandardMdDocGenerator` exporter. You can see 
 
 ## How can can I use Ducker?
 Easiest way to use Ducker is to download the latest release. **Please note that it requires Rhino 7 and Windows .NET Framework 4.8 installed to run.** Follow these instructions:
-- Download the latest release from [here](https://github.com/EmilPoulsen/Ducker/releases).
+- Download the latest release from [here](https://github.com/EmilPoulsen/Ducker/releases). Choose the zip file matching the pattern `ducker-X.X.X.zip`.
 - Unblock the zip
 - Unzip the file
 - Double click on the Ducker.exe file.
