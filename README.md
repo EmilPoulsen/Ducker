@@ -138,3 +138,6 @@ Check out the [`MarkDownDocGenerator`](https://github.com/EmilPoulsen/Ducker/blo
 
 ## License
 [MIT](/LICENSE)
+
+## Support Ducker
+Do you find Ducker useful? [Buy me a coffe](https://www.buymeacoffee.com/2SRF6X1V6S)! :)
