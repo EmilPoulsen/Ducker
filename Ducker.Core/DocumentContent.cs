@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
@@ -14,12 +10,12 @@ namespace Ducker.Core
     public class DocumentContent
     {
         /// <summary>
-        /// Defualt constructor.
+        /// Default constructor.
         /// </summary>
         public DocumentContent()
         {
-            this.Icons = new List<Bitmap>();
-            this.RelativePathIcons = "img";
+            Icons = new List<Bitmap>();
+            RelativePathIcons = "img";
         }
 
         /// <summary>

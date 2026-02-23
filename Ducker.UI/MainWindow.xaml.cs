@@ -1,23 +1,15 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Ducker.Core;
-using System.ComponentModel;
 using System.Threading;
+
+using Microsoft.Win32;
+
+using Ducker.Core;
 
 namespace Ducker.UI
 {
@@ -26,16 +18,16 @@ namespace Ducker.UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private DuckRunner _duckRunner;
+        private readonly DuckRunner _duckRunner;
         
         public MainWindow()
         {
             InitializeComponent();
             var version = Assembly.GetExecutingAssembly().GetName().Version;
             string assemblyVersion = $"{version.Major}.{version.Minor}.{version.Build}";
-            this.Title = string.Format(" Ducker {0} (beta)", assemblyVersion);
+            Title = string.Format(" Ducker {0} (beta)", assemblyVersion);
             PopulateComboBoxWithIDocGeneratorTypes();
-            this.pbStatus.Value = 0;
+            pbStatus.Value = 0;
 
             _duckRunner = new DuckRunner();
             _duckRunner.Progress += DuckRunner_Progress;
@@ -71,9 +63,9 @@ namespace Ducker.UI
 
         private void DuckRunner_Progress(object sender, ProgressEventArgs e)
         {
-            this.Dispatcher.Invoke(() => {
-                this.pbStatus.Value = e.Progress;
-                this.tblockStatus.Text = e.Message;
+            Dispatcher.Invoke(() => {
+                pbStatus.Value = e.Progress;
+                tblockStatus.Text = e.Message;
             });
         }
 
@@ -104,20 +96,20 @@ namespace Ducker.UI
         
         private void ShowMessageBox(string message)
         {
-            System.Windows.MessageBox.Show(this, message);
+            MessageBox.Show(this, message);
         }
 
         private ExportSettings CollectOptions()
         {
             ExportSettings s = new ExportSettings();
-            this.Dispatcher.Invoke(() => {
-                s.Description = this.cbxDescription.IsChecked.Value;
-                s.ExportIcons = this.cbxExportIcons.IsChecked.Value;
-                s.IgnoreHidden = this.cbxIgnoreHidden.IsChecked.Value;
-                s.Name = this.cbxName.IsChecked.Value;
-                s.NickName = this.cbxNickName.IsChecked.Value;
-                s.Parameters = this.cbxParameters.IsChecked.Value;
-                s.DocWriter = this.cmbColors.SelectedItem as Type;
+            Dispatcher.Invoke(() => {
+                s.Description = cbxDescription.IsChecked.Value;
+                s.ExportIcons = cbxExportIcons.IsChecked.Value;
+                s.IgnoreHidden = cbxIgnoreHidden.IsChecked.Value;
+                s.Name = cbxName.IsChecked.Value;
+                s.NickName = cbxNickName.IsChecked.Value;
+                s.Parameters = cbxParameters.IsChecked.Value;
+                s.DocWriter = cmbColors.SelectedItem as Type;
             });
             return s;
         }
@@ -139,21 +131,21 @@ namespace Ducker.UI
 
             await Task.Run(() =>
             {
-                _duckRunner.Run(reader, docGen, docWrite);
+                _duckRunner.Run(reader, docGen, docWrite, settings);
                 Thread.Sleep(4000); //Show the complete msg in progress bar for 1 sec.
                 DuckRunner_Progress(this, new ProgressEventArgs("", 0));
             });
         }
 
-        private bool IsPathValid(string path)
+        private static bool IsPathValid(string path)
         {
             return !string.IsNullOrEmpty(path) && File.Exists(path);
         }
 
-        private void btnSetPath_Click(object sender, RoutedEventArgs e)
+        private void BtnSetPath_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Grasshopper assemblies|*.gha"; ;
+            openFileDialog.Filter = "Grasshopper assemblies|*.gha";
 
             if (openFileDialog.ShowDialog() == true)
             {

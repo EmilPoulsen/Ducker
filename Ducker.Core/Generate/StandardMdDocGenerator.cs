@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
@@ -14,10 +12,11 @@ namespace Ducker.Core
         /// <summary>
         /// Creates the contents of the document based on components and the export settings
         /// </summary>
+        /// <param name="plugin">The plugin details.</param>
         /// <param name="components">The components included in the gha.</param>
         /// <param name="settings">The output settings.</param>
         /// <returns>Content of the document.</returns>
-        public override DocumentContent Create(List<DuckerComponent> components, ExportSettings settings)
+        public override DocumentContent Create(DuckerPlugin plugin, List<DuckerComponent> components, ExportSettings settings)
         {
             DocumentContent docContent = new DocumentContent();
             StringBuilder builder = new StringBuilder();
@@ -28,7 +27,7 @@ namespace Ducker.Core
                     continue;
 
                 builder.AppendLine(string.Format("{0} {1}", Header(component.Name), Image("",
-                    docContent.RelativePathIcons, component.GetNameWithoutSpaces())));
+                    docContent.RelativePathIcons, component.GetValidFileName())));
                 builder.Append(Paragraph(Bold(nameof(component.Name) + ":") + " " + component.Name));
                 builder.Append(Paragraph(Bold(nameof(component.NickName) + ":") + " " + component.NickName));
                 builder.Append(Paragraph(Bold(nameof(component.Description) + ":") + " " + component.Description));
@@ -49,7 +48,7 @@ namespace Ducker.Core
             }
 
             docContent.Document = builder.ToString();
-            docContent.Icons = base.ReadIcons(components);
+            docContent.Icons = ReadIcons(components);
             return docContent;
         }
     }

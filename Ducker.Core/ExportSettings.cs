@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
@@ -62,7 +58,8 @@ namespace Ducker.Core
                     IgnoreHidden = true,
                     Name = true,
                     NickName = true,
-                    Parameters = true
+                    Parameters = true,
+                    DocWriter = typeof(StandardMdDocGenerator),
                 };
             }
         }

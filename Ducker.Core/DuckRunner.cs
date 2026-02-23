@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ducker.Core
 {
@@ -17,7 +13,7 @@ namespace Ducker.Core
         /// </summary>
         public DuckRunner()
         {
-            this.AssemblyPath = string.Empty;
+            AssemblyPath = string.Empty;
         }
 
         /// <summary>
@@ -26,7 +22,7 @@ namespace Ducker.Core
         /// <param name="path">Full path to the input .gha file to parse.</param>
         public DuckRunner(string path)
         {
-            this.AssemblyPath = path;
+            AssemblyPath = path;
         }
 
         /// <summary>
@@ -42,14 +38,14 @@ namespace Ducker.Core
         /// <param name="docWrite">Document writer.</param>
         public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite)
         {
-            this.Run(reader, docGen, docWrite, ExportSettings.Default);
+            Run(reader, docGen, docWrite, ExportSettings.Default);
         }
 
         public void TryInitializeRhino(IGhaReader reader)
         {
             var rhino = reader as RhinoHeadlessGhaReader;
             OnProgress("Starting Rhino..", 0);
-            rhino.AssemblyInitialize();            
+            rhino?.AssemblyInitialize();
         }
         
         /// <summary>
@@ -62,12 +58,16 @@ namespace Ducker.Core
         public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite, ExportSettings settings)
         {
             OnProgress("Extracting..", 15);
-            var duckers = reader.Read(this.AssemblyPath);
+            var plugin = reader.ReadPlugin(this.AssemblyPath);
+            var components = reader.ReadComponents(this.AssemblyPath);
+            
             OnProgress("Creating document..", 33);
-            var content = docGen.Create(duckers);
+            var content = docGen.Create(plugin, components, settings);
+            
             OnProgress("Saving document..", 66); 
             string pathToOutput = CreateOutputPath(this.AssemblyPath, docGen.FileExtension);
             docWrite.Write(content, pathToOutput);
+            
             OnProgress("Done! Output folder is found next to input gha.", 100);
         }
 
@@ -85,6 +85,7 @@ namespace Ducker.Core
 
             //Get directory, add subfolder "ducker".
             string directory = Path.GetDirectoryName(pathToDll);
+            if (string.IsNullOrEmpty(directory)) throw new InvalidOperationException();
             string combined = Path.Combine(directory, "ducker", fileName);
 
             return combined;
@@ -103,11 +104,7 @@ namespace Ducker.Core
         protected virtual void OnProgress(string message, double percentage)
         {
             ProgressEventArgs e = new ProgressEventArgs(message, percentage);
-            EventHandler<ProgressEventArgs> handler = Progress;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            Progress?.Invoke(this, e);
         }
 
     }
@@ -115,19 +112,13 @@ namespace Ducker.Core
     /// <summary>
     /// Event arguments for events when progress is made.
     /// </summary>
-    public class ProgressEventArgs : EventArgs
+    /// <remarks>
+    /// Default constructor.
+    /// </remarks>
+    public class ProgressEventArgs(string message, double percentage) : EventArgs
     {
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public ProgressEventArgs(string message, double percentage)
-        {
-            this.Message = message;
-            this.Progress = percentage;            
-        }
-        
-        public string Message { get; set; }
-        public double Progress { get; set; }
+        public string Message { get; set; } = message;
+        public double Progress { get; set; } = percentage;
 
     }
 }

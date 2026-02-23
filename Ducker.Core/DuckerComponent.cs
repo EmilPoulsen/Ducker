@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace Ducker.Core
 {
@@ -10,8 +13,8 @@ namespace Ducker.Core
     {
         public DuckerComponent()
         {
-            this.Input = new List<DuckerParam>();
-            this.Output = new List<DuckerParam>();
+            Input = new List<DuckerParam>();
+            Output = new List<DuckerParam>();
         }
 
         /// <summary>
@@ -22,40 +25,66 @@ namespace Ducker.Core
         /// <summary>
         /// The output parameters of the component.
         /// </summary>
-        public List<DuckerParam> Output { get; set; }
+        public List<DuckerParam> Output { get; }
 
         /// <summary>
         /// The description of the component.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; init; }
 
         /// <summary>
         /// The name of the component.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         /// <summary>
         /// The nick name of the component.
         /// </summary>
-        public string NickName { get; set; }
+        public string NickName { get; init; }
 
         /// <summary>
         /// The icon of the component (png)
         /// </summary>
-        public Bitmap Icon { get; set; }
+        public Bitmap Icon { get; init; }
         
         /// <summary>
         /// The exposure level of the component as string.
         /// </summary>
-        public string Exposure { get; set; }
+        public string Exposure { get; init; }
 
         /// <summary>
-        /// Returns this.Name without any spaces. Used when generating file names.
+        /// Returns a valid file name, used for the icon file of the component.
         /// </summary>
-        /// <returns>The name without any spaces.</returns>
-        public string GetNameWithoutSpaces()
+        /// <param name="replacementChar"></param>
+        /// <returns></returns>
+        public string GetValidFileName(char replacementChar = '_')
         {
-            return this.Name.Replace(" ", string.Empty);
+            char[] invalidChars = Path.GetInvalidFileNameChars();
+            char[] ignoredChars = ['.', ' '];
+
+            var sb = new StringBuilder();
+
+            foreach (var c in Name)
+            {
+                if (invalidChars.Contains(c))
+                {
+                    sb.Append(replacementChar);
+                }
+                else if (ignoredChars.Contains((c)))
+                {
+                    sb.Append(string.Empty);
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+            // TODO Additional considerations:
+            // 1. Ensure the file name is not empty or composed solely of dots.
+            // 2. Truncate the name if it exceeds the maximum path length (often ~260 characters).
+            // 3. Avoid using reserved names like "CON", "PRN", "AUX", etc.
+            // The basic character replacement handles most cases.
+            return sb.ToString();
         }
 
         /// <summary>
@@ -64,7 +93,7 @@ namespace Ducker.Core
         /// <returns>The name of the component.</returns>
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Ducker.Core
 {
     /// <summary>
@@ -15,17 +10,17 @@ namespace Ducker.Core
         /// <summary>
         /// Description of the parameter.
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; init; }
 
         /// <summary>
         /// The name of the parameter.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         /// <summary>
         /// The nickname of the parameter.
         /// </summary>
-        public string NickName { get; set; }
+        public string NickName { get; init; }
 
         /// <summary>
         /// Returns this.Name
@@ -33,7 +28,7 @@ namespace Ducker.Core
         /// <returns>The name of the parameter.</returns>
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
     }
 }
