@@ -120,7 +120,7 @@ namespace Ducker.UI
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = Activator.CreateInstance(settings.DocWriter)
                 as IDocGenerator;
-            IDocWriter docWrite = new MarkDownDocWriter();
+            IDocWriter docWrite = docGen.CreateWriter();
 
             DuckRunner_Progress(this, new ProgressEventArgs("Starting Rhino...", 0));
 

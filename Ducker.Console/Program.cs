@@ -27,7 +27,7 @@ namespace Ducker
 
             IGhaReader reader = new RhinoHeadlessGhaReader();
             IDocGenerator docGen = Activator.CreateInstance(settings.DocWriter) as IDocGenerator;
-            IDocWriter docWrite = new MarkDownDocWriter();
+            IDocWriter docWrite = docGen.CreateWriter();
 
             DuckRunner duckerRunner = new DuckRunner
             {
@@ -103,6 +103,7 @@ namespace Ducker
             {
                 "standard" => typeof(StandardMdDocGenerator),
                 "standardtoc" => typeof(StandardWithTocMdDocGenerator),
+                "html" => typeof(HtmlDocGenerator),
                 // Add other generators here as you create them:
                 // "custom" => typeof(CustomDocGenerator),
                 _ => typeof(StandardMdDocGenerator) // Fallback

@@ -22,6 +22,9 @@ namespace Ducker.Core
             }
         }
 
+        /// <inheritdoc/>
+        public IDocWriter CreateWriter() => new MarkDownDocWriter();
+
         /// <summary>
         /// Creates a markdown file based on the provided components. Uses default settings.
         /// </summary>
