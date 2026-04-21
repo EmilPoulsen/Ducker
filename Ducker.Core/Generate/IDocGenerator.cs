@@ -28,5 +28,10 @@ namespace Ducker.Core
         /// File extension of the output file. For instance txt or md.
         /// </summary>
         string FileExtension { get; }
+
+        /// <summary>
+        /// Creates the appropriate writer for this generator's output format.
+        /// </summary>
+        IDocWriter CreateWriter();
     }
 }
