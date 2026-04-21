@@ -13,17 +13,17 @@ namespace Ducker.Core
     public class HtmlDocGenerator : IDocGenerator
     {
         /// <inheritdoc/>
-        public string FileExtension => "html";
+        public virtual string FileExtension => "html";
 
         /// <inheritdoc/>
-        public IDocWriter CreateWriter() => new HtmlDocWriter();
+        public virtual IDocWriter CreateWriter() => new HtmlDocWriter();
 
         /// <inheritdoc/>
         public DocumentContent Create(DuckerPlugin plugin, List<DuckerComponent> components)
             => Create(plugin, components, ExportSettings.Default);
 
         /// <inheritdoc/>
-        public DocumentContent Create(DuckerPlugin plugin, List<DuckerComponent> components, ExportSettings settings)
+        public virtual DocumentContent Create(DuckerPlugin plugin, List<DuckerComponent> components, ExportSettings settings)
         {
             DocumentContent docContent = new DocumentContent();
             StringBuilder sb = new StringBuilder();
@@ -45,6 +45,9 @@ namespace Ducker.Core
             sb.AppendLine("    .toc a { text-decoration: none; color: #0366d6; }");
             sb.AppendLine("    .toc a:hover { text-decoration: underline; }");
             sb.AppendLine("    hr { border: none; border-top: 1px solid #eee; margin: 2rem 0; }");
+            sb.AppendLine("    .btn-print { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: .6rem 1.2rem; background: #0366d6; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.2); }");
+            sb.AppendLine("    .btn-print:hover { background: #0056b3; }");
+            sb.AppendLine("    @media print { .btn-print { display: none; } }");
             sb.AppendLine("  </style>");
             sb.AppendLine("</head>");
             sb.AppendLine("<body>");
@@ -107,6 +110,7 @@ namespace Ducker.Core
                 sb.AppendLine("<hr/>");
             }
 
+            sb.AppendLine("  <button class=\"btn-print\" onclick=\"window.print()\">🖨 Print / Save as PDF</button>");
             sb.AppendLine("</body>");
             sb.AppendLine("</html>");
 

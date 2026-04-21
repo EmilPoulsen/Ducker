@@ -37,7 +37,13 @@ namespace Ducker
             try
             {
                 duckerRunner.TryInitializeRhino(reader);
-                duckerRunner.Run(reader, docGen, docWrite, settings);
+                string outputPath = duckerRunner.Run(reader, docGen, docWrite, settings);
+                OpenFile(outputPath);
+            }
+            catch (PdfFallbackException)
+            {
+                Console.WriteLine("Chrome/Edge not found. The HTML file has been opened in your default browser for manual printing.");
+                return 0;
             }
             catch (Exception e)
             {
@@ -104,10 +110,20 @@ namespace Ducker
                 "standard" => typeof(StandardMdDocGenerator),
                 "standardtoc" => typeof(StandardWithTocMdDocGenerator),
                 "html" => typeof(HtmlDocGenerator),
+                "pdf" => typeof(PdfDocGenerator),
                 // Add other generators here as you create them:
                 // "custom" => typeof(CustomDocGenerator),
                 _ => typeof(StandardMdDocGenerator) // Fallback
             };
+        }
+
+        private static void OpenFile(string path)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true,
+            });
         }
 
         private static void PrintUsage()
@@ -115,7 +131,7 @@ namespace Ducker
             Console.WriteLine("Usage: Ducker <pathToDll> [flags]");
             Console.WriteLine("\nOptions:");
             Console.WriteLine("  -w, --writer <type>    Documentation generator (default: standard)");
-            Console.WriteLine("                             Valid types: standard, standardToC");
+            Console.WriteLine("                             Valid types: standard, standardToC, html, pdf");
             Console.WriteLine("  --include_hidden       Include hidden components");
             Console.WriteLine("  --no_name              Include component names");
             Console.WriteLine("  --no_nickname          Include nicknames");

@@ -36,9 +36,10 @@ namespace Ducker.Core
         /// <param name="reader">Grasshopper assembly reader.</param>
         /// <param name="docGen">Document generator.</param>
         /// <param name="docWrite">Document writer.</param>
-        public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite)
+        /// <returns>Full path to the generated output file.</returns>
+        public string Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite)
         {
-            Run(reader, docGen, docWrite, ExportSettings.Default);
+            return Run(reader, docGen, docWrite, ExportSettings.Default);
         }
 
         public void TryInitializeRhino(IGhaReader reader)
@@ -55,7 +56,8 @@ namespace Ducker.Core
         /// <param name="docGen">Document generator.</param>
         /// <param name="docWrite">Document writer.</param>
         /// <param name="settings">Settings to apply.</param>
-        public void Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite, ExportSettings settings)
+        /// <returns>Full path to the generated output file.</returns>
+        public string Run(IGhaReader reader, IDocGenerator docGen, IDocWriter docWrite, ExportSettings settings)
         {
             OnProgress("Extracting..", 15);
             var plugin = reader.ReadPlugin(this.AssemblyPath);
@@ -69,6 +71,7 @@ namespace Ducker.Core
             docWrite.Write(content, pathToOutput);
             
             OnProgress("Done! Output folder is found next to input gha.", 100);
+            return pathToOutput;
         }
 
         /// <summary>

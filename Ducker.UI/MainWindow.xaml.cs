@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -131,7 +132,21 @@ namespace Ducker.UI
 
             await Task.Run(() =>
             {
-                _duckRunner.Run(reader, docGen, docWrite, settings);
+                try
+                {
+                    string outputPath = _duckRunner.Run(reader, docGen, docWrite, settings);
+                    Process.Start(new ProcessStartInfo { FileName = outputPath, UseShellExecute = true });
+                }
+                catch (PdfFallbackException)
+                {
+                    Dispatcher.Invoke(() =>
+                        MessageBox.Show(this,
+                            "Chrome/Edge not found on this machine.\n\nThe HTML file has been opened in your default browser — use File > Print > Save as PDF to export it manually.",
+                            "PDF export — manual step required",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information));
+                }
+
                 Thread.Sleep(4000); //Show the complete msg in progress bar for 1 sec.
                 DuckRunner_Progress(this, new ProgressEventArgs("", 0));
             });
